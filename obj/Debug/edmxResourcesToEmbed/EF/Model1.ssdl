@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MydbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="comment">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="contents" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PostId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="post">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="contents" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_comment_post">
+    <End Role="post" Type="Self.post" Multiplicity="1" />
+    <End Role="comment" Type="Self.comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="post">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="PostId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_comment_user">
+    <End Role="user" Type="Self.user" Multiplicity="1" />
+    <End Role="comment" Type="Self.comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_post_user">
+    <End Role="user" Type="Self.user" Multiplicity="1" />
+    <End Role="post" Type="Self.post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="post">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MydbModelStoreContainer">
+    <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="post" EntityType="Self.post" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_comment_post" Association="Self.FK_comment_post">
+      <End Role="post" EntitySet="post" />
+      <End Role="comment" EntitySet="comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_comment_user" Association="Self.FK_comment_user">
+      <End Role="user" EntitySet="user" />
+      <End Role="comment" EntitySet="comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_post_user" Association="Self.FK_post_user">
+      <End Role="user" EntitySet="user" />
+      <End Role="post" EntitySet="post" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

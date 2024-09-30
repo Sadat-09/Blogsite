@@ -1,0 +1,45 @@
+﻿
+
+@{
+    ViewBag.Title = "viewcontent";
+}
+
+<h2>viewcontent</h2>
+
+<div>
+    <h4>postDTO</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <div>
+            <p>@Model.Username</p>
+        </div>
+
+        <div>
+            <p>@Model.contents</p>
+        </div>
+
+        <div>
+            @if (@Model.comments.Count > 0)
+            {
+                <h5>Comments</h5>
+                <ul>
+                    @foreach (var item in Model.comments)
+                    {
+                        <li>@item.contents</li>
+
+                        <li>@item.UserId</li>
+                    }
+                </ul>
+
+            }
+            else
+            {
+                <h5>No Comments</h5>
+            }
+        </div>
+
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>

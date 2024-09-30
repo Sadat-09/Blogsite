@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>View Blog</title>
+</head>
+<body>
+    <p><a href="Create">Create New</a></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Username</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Repeat this row for each item in your Model -->
+            @foreach (var d in Model)
+            {
+                <tr>
+                    <td><a href="/post/viewcontent/@d.id"> @d.title</a></td>
+                    <td>@d.Username</td>
+                    <td>
+                        <a href="Edit">Edit</a> |
+                        <a href="Details">Details</a> |
+                        <a href="Delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <form action="/post/AddComment" method="post">
+                           
+                            <input type="hidden" name="PostId" value="@d.id" />
+                            <textarea name="CommentText" required></textarea>
+                            <input type="submit" value="Submit " />
+                        </form>
+                    </td>
+                </tr>
+            }
+            <!-- End of repeated rows -->
+        </tbody>
+    </table>
+</body>
+</html>

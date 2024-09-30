@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MydbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="comment">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PostId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="post" Relationship="Self.FK_comment_post" FromRole="comment" ToRole="post" />
+    <NavigationProperty Name="user" Relationship="Self.FK_comment_user" FromRole="comment" ToRole="user" />
+  </EntityType>
+  <EntityType Name="post">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="comments" Relationship="Self.FK_comment_post" FromRole="post" ToRole="comment" />
+    <NavigationProperty Name="user" Relationship="Self.FK_post_user" FromRole="post" ToRole="user" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="comments" Relationship="Self.FK_comment_user" FromRole="user" ToRole="comment" />
+    <NavigationProperty Name="posts" Relationship="Self.FK_post_user" FromRole="user" ToRole="post" />
+  </EntityType>
+  <Association Name="FK_comment_post">
+    <End Role="post" Type="Self.post" Multiplicity="1" />
+    <End Role="comment" Type="Self.comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="post">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="PostId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_comment_user">
+    <End Role="user" Type="Self.user" Multiplicity="1" />
+    <End Role="comment" Type="Self.comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_post_user">
+    <End Role="user" Type="Self.user" Multiplicity="1" />
+    <End Role="post" Type="Self.post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="post">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MydbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="comments" EntityType="Self.comment" />
+    <EntitySet Name="posts" EntityType="Self.post" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK_comment_post" Association="Self.FK_comment_post">
+      <End Role="post" EntitySet="posts" />
+      <End Role="comment" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_comment_user" Association="Self.FK_comment_user">
+      <End Role="user" EntitySet="users" />
+      <End Role="comment" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_post_user" Association="Self.FK_post_user">
+      <End Role="user" EntitySet="users" />
+      <End Role="post" EntitySet="posts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
